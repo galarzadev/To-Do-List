@@ -54,7 +54,9 @@ else: # Creating settings file since it doesn't exist
 # 3. Greeting to the User
 print("Hey " + settings.get("name") + ". Welcome to the TO-DO program")
 
-# def greeting(name):
-#   return (str("Hi " + name + ". Ready to work?\n"))
+# 4. Checking the task file
+# 5. main -> Showing the menu
 
-# print(greeting(name))
+# if if if if if if
+
+# 6. say gooobye
