@@ -36,12 +36,13 @@ def pending():
     print()
     print("\n-> 1. TO DO list\n") #print
     for task in saved_tasks:
-      print(task + ". " + str(saved_tasks[task][0]) + ": " + str(saved_tasks[task][1]))
+      if saved_tasks[task][1] == "not done":
+        print(task + ". " + str(saved_tasks[task][0]) + ": " + str(saved_tasks[task][1]))
     print()
-    print(settings.get("name") + "! Did you get it done? Anyways enter '0' when you finish here to go back to the  TO DO list menu")
+    print(settings.get("name") + "! Did you get it done? Anyways enter '0' to go back to principal menu")
     pending_opt = str(input())
     os.system("cls") #borrar consola
-    if pending_opt in saved_tasks:
+    if (pending_opt in saved_tasks) and saved_tasks[pending_opt][1] == "not done":
       tasking(pending_opt)
 
 def tasking(task_id):
@@ -50,20 +51,90 @@ def tasking(task_id):
     print()
     print("\n-> " + task_id + ". " + str(saved_tasks[task_id][0]) + ": " + str(saved_tasks[task_id][1]) + "\n") #print
     print()
-    print("Please enter the number of one task above or '0' to go back to principal menu")
-    print("1. Complete")
-    print("2. Delete")
-    print("\n-> 0. Exit")
+    print("Please tell me you did it! If so, enter '1' :D, but if you haven't done it yet, GET OUT OF HERE (enter 'o' please)")
+    tasking_opt = str(input())
+    os.system("cls") #borrar consola
+    if tasking_opt == "1" :
+      saved_tasks[task_id][1] = "done"
+      while tasking_opt != "0":
+        os.system("cls") #borrar consola
+        tasking_opt = str(input("\nCongratulations! now go back with '0' ^.^\n"))
+      os.system("cls") #borrar consola
+
+
+def unpending():
+  pending_opt = ""
+  while pending_opt != "0":
+    print()
+    print("\n-> 2. DONE list\n") #print
+    for task in saved_tasks:
+      if saved_tasks[task][1] == "done":
+        print(task + ". " + str(saved_tasks[task][0]) + ": " + str(saved_tasks[task][1]))
+    print()
+    print("Please enter the number of one task above or '0' to go back to principal menu") 
+    pending_opt = str(input())
+    os.system("cls") #borrar consola
+    if pending_opt in saved_tasks and saved_tasks[pending_opt][1] == "done":
+      untasking(pending_opt)
+
+def untasking(task_id):
+  tasking_opt = ""
+  while tasking_opt != "0":
+    print()
+    print("\n-> " + task_id + ". " + str(saved_tasks[task_id][0]) + ": " + str(saved_tasks[task_id][1]) + "\n") #print
+    print()
+    print(settings.get("name") + "! YOU DIDN'T DO IT. DON'T YOU? Anyways enter '1' to put it back in the to-do list or '0' if this was a mistake :)")#####!!!!!
     tasking_opt = str(input())
     os.system("cls") #borrar consola
     if tasking_opt == "1":
-      saved_tasks[task_id][1] = "done"
-      tasking_opt = str(input("\n-> 0. Exit\n"))
-    if tasking_opt == "2":
+      saved_tasks[task_id][1] = "not done"
+      while tasking_opt != "0":
+        os.system("cls") #borrar consola
+        tasking_opt = str(input("\nDon't worry. Now go get it done and make me proud :3 (enter 'o' please)\n"))
+      os.system("cls") #borrar consola
+
+
+def all_task():
+  pending_opt = ""
+  while pending_opt != "0":
+    print()
+    print("\n-> 3. All the tasks\n") #print
+    for task in saved_tasks:
+      print(task + ". " + str(saved_tasks[task][0]) + ": " + str(saved_tasks[task][1]))
+    print()
+    print(settings.get("name") + "! Chose one task. Anyways enter '0' when you finish here to go back to the  TO DO list menu")
+    pending_opt = str(input())
+    os.system("cls") #borrar consola
+    if pending_opt in saved_tasks and saved_tasks[pending_opt][1] == "not done":
+      tasking(pending_opt)
+    elif pending_opt in saved_tasks and saved_tasks[pending_opt][1] == "done":
+      untasking(pending_opt)
+
+def create_task():
+  os.system("cls") #borrar consola
+  print("\n4. Create a task\n")
+  new_task = input("\nTell me. What are we going to do now?\n\n")
+  saved_tasks[str(int(max(saved_tasks.keys()))+1)] = [str(new_task), "not done"]
+  os.system("cls") #borrar consola
+  print("\nGood, '" + str(new_task) + "' added to the list.")
+
+
+def delete_task():
+  os.system("cls") #borrar consola
+  print("\n5. Delete a task\n")
+  for task in saved_tasks:
+    print(task + ". " + str(saved_tasks[task][0]) + ": " + str(saved_tasks[task][1]))
+  print()
+  task_id = str(input("\nOk then, enter the task number you are deleting.\n"))
+  pending_opt = ""
+  while pending_opt != "0":
+    os.system("cls") #borrar consola
+    task_getting_deleted = task_id + ". " + str(saved_tasks[task_id][0]) + ": " + str(saved_tasks[task_id][1])
+    pending_opt = str(input("\nAre you sure? '" + task_getting_deleted + "' Will be deleted. Enter '1' to delete, '0' to go back.\n"))
+    if pending_opt == "1":
       del saved_tasks[task_id]
-      tasking_opt = str(input("\n-> 0. Exit\n"))
-
-
+      pending_opt = str(input("\n'" + task_getting_deleted + "' -> DELETED\n\nEnter '0' to go back."))
+  
 # ------------------------------------------------------
 
 # 2. Is my seetings file ok?
@@ -97,7 +168,7 @@ else: # Creating settings file since it doesn't exist
 # ------------------------------------------------------
 
 # 3. Greeting to the User
-print("\nHey " + settings.get("name") + ". Welcome to the TO-DO program")
+print("\nHey " + settings.get("name") + ". Welcome to the TO-DO program\n\n *** DON'T FORGET TO CLOSE THE FROM THE MAIN MENU SO I CAN SAVE THE CHANGES ***")
 
 # ------------------------------------------------------
 
@@ -137,19 +208,34 @@ while general_opt != "0":
   print("1. TO DO list")
   print("2. DONE list")
   print("3. List all the tasks")
+  print("4. Create a task")
+  print("5. Delete a task")
   print("\n-> 0. Exit")
   print()
   general_opt = str(input())
   if general_opt != "0":
     os.system("cls") #borrar consola
+
   if general_opt == "1":
     pending()
-
-# if if if if if if
+  elif general_opt == "2":
+    unpending()
+  elif general_opt == "3":
+    all_task()
+  elif general_opt == "4":
+    create_task()
+  elif general_opt == "5":
+    delete_task()
 
 # ------------------------------------------------------
 
-# 6. say gooobye
+# 6. Saving changes
+with open(files_dir + tasks_file, 'w', encoding="utf-8") as f:
+  json.dump(saved_tasks, f) # saving tasks file
+
+# ------------------------------------------------------
+
+# 7. say gooobye
 
 print("\nBye " + settings.get("name") + ". Doing things with you is always exciting ^.^\n")
 
@@ -158,3 +244,4 @@ print("\nBye " + settings.get("name") + ". Doing things with you is always excit
 #  {"Hacer la tarea de MinTic": "done", "Redactar la documentacion": "not done"}
 # {"1": {"Hacer la tarea de MinTic": "done"}, "2": {"Redactar la documentacion": "not done"}}
 # {"1": ["Hacer la tarea de MinTic", "done"], "2": ["Redactar la documentacion", "not done"]}
+# {"1": ["Hacer la tarea de MinTic", "done"], "2": ["Redactar la documentacion", "done"], "3": ["Perreo cochino", "not done"], "4": ["Go buy more beer", "not done"], "5": ["Implementar la funcion de borrar tareaas de la lista ", "not done"], "6": ["Comer lo que mam\u00e1 est\u00e1 preparando", "not done"]}
