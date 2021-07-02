@@ -1,5 +1,5 @@
 # To-Do-List
-Phyton Console Project
+Python Console Project
 
 - Subtly toxic task manager assistant
 - Easy to work with
